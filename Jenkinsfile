@@ -25,6 +25,7 @@ pipeline {
 	stages {
 		stage ('Write env files') {
 			steps {
+				echo env.ENV_FILE
 				writeFile file: '.env', text: env.ENV_FILE
 				writeFile file: 'database.env', text: env.DATABASE_ENV_FILE
 			}
