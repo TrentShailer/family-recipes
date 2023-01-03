@@ -25,7 +25,7 @@ export default async function (fastify: FastifyInstance) {
 			SELECT
 				id, name, password
 			FROM users
-			WHERE name == $1;
+			WHERE name = $1;
 			`,
         [name]
       );
