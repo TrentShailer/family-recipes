@@ -51,7 +51,7 @@ pipeline {
 			}
 			steps {
 				echo 'Deploying...'
-				sh "docker compose -p family-recipes --env-file $ENV_FILE up -d"
+				sh 'docker compose -p family-recipes --env-file $ENV_FILE up -d'
 			}
 		}
 	}
