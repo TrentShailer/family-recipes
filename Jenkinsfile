@@ -19,17 +19,9 @@ pipeline {
 
 	environment {
 		ENV_FILE = credentials('family-recipes-env')
-		DATABASE_ENV_FILE = credentials('family-recipes-database-env')
 	}
 
 	stages {
-		stage ('Write env files') {
-			steps {
-				echo env.ENV_FILE
-				writeFile file: '.env', text: env.ENV_FILE
-				writeFile file: 'database.env', text: env.DATABASE_ENV_FILE
-			}
-		}
 		stage ('Install Dependencies') {
 			steps {
 				sh 'yarn install'
@@ -59,7 +51,7 @@ pipeline {
 			}
 			steps {
 				echo 'Deploying...'
-				sh 'docker compose -p family-recipes up -d'
+				sh "docker compose -p family-recipes --env-file $ENV_FILE up -d"
 			}
 		}
 	}
