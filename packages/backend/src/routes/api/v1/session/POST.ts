@@ -1,5 +1,6 @@
 import type { FastifyInstance, FastifySchema } from "fastify";
 import * as argon2 from "argon2";
+import { FastifyJWT } from "@fastify/jwt";
 interface Body {
   name: string;
   password: string;
@@ -47,7 +48,7 @@ export default async function (fastify: FastifyInstance) {
         };
         return reply.status(401).send(errorResponse);
       }
-      const payload: FamilyRecipes.JWTPayload = {
+      const payload = {
         user: {
           id: rows[0].id,
         },

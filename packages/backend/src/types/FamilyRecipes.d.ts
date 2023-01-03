@@ -3,10 +3,4 @@ declare namespace FamilyRecipes {
     message: string;
     code: string;
   };
-
-  export type JWTPayload = {
-    user: {
-      id: string;
-    };
-  };
 }

@@ -96,8 +96,14 @@ declare namespace fastifyJwt {
    * ```
    */
   export interface FastifyJWT {
-    // payload: ...
-    // user: ...
+    payload: {
+      user: {
+        id: string;
+      };
+    };
+    user: {
+      id: string;
+    };
   }
 
   export type SignPayloadType = FastifyJWT extends { payload: infer T }

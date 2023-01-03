@@ -50,11 +50,37 @@ fastify.register(fastifyJwt, {
   },
   sign: {
     algorithm: process.env.KEY_ALGORITHM,
+    expiresIn: "14d",
   },
   cookie: {
     cookieName: "token",
     signed: true,
   },
+});
+
+fastify.get("/test", async (request, reply) => {
+  const token = await reply.jwtSign({ user: { id: "1" } });
+  return reply
+    .setCookie("token", token, {
+      domain: process.env.DOMAIN ?? "localhost",
+      path: "/",
+      secure: true,
+      httpOnly: true,
+      sameSite: true,
+    })
+    .status(200)
+    .send();
+});
+
+fastify.addHook("onRequest", async (request, reply, done) => {
+  if (request.cookies.token) {
+    try {
+      const decoded = await request.jwtVerify();
+      console.log(decoded);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 });
 
 fastify.register(fastifyStatic, {
