@@ -45,9 +45,7 @@ fastify.register(require("@fastify/cookie"));
 
 fastify.register(fastifyJwt, {
   secret: {
-    private: {
-      key: process.env.PUBLIC_KEY,
-    },
+    private: process.env.PUBLIC_KEY,
     public: process.env.PRIVATE_KEY,
   },
   sign: {
