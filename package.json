@@ -1,6 +1,6 @@
 {
 	"name": "family-recipes",
-	"version": "1.0.0",
+	"version": "0.0.0",
 	"packageManager": "yarn@3.3.1",
 	"devDependencies": {
 		"lerna": "^6.3.0",
