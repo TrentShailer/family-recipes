@@ -18,6 +18,7 @@ pipeline {
 	agent any
 
 	environment {
+		DOCKER_CREDS = credentials('docker-creds')
 		ENV_FILE = credentials('family-recipes-env')
 	}
 
@@ -39,6 +40,7 @@ pipeline {
 		}
 		stage ('Docker Build') {
 			steps {
+				sh "docker login -u \"$DOCKER_CREDS_USR\" -p \"$DOCKER_CREDS_PSW\""
 				sh "docker build -t family-recipes:${getVersion()} ."
 				sh "docker tag family-recipes:${getVersion()} portfolio:latest"
 			}
