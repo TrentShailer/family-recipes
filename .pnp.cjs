@@ -1641,15 +1641,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["@tsconfig/node18-strictest-esm", [\
-        ["npm:1.0.1", {\
-          "packageLocation": "./.yarn/cache/@tsconfig-node18-strictest-esm-npm-1.0.1-95e3fd9fca-9da55e6959.zip/node_modules/@tsconfig/node18-strictest-esm/",\
-          "packageDependencies": [\
-            ["@tsconfig/node18-strictest-esm", "npm:1.0.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["@types/json5", [\
         ["npm:0.0.29", {\
           "packageLocation": "./.yarn/cache/@types-json5-npm-0.0.29-f63a7916bd-e60b153664.zip/node_modules/@types/json5/",\
@@ -2123,7 +2114,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@fastify/postgres", "virtual:aa59773ac87791c4813d53447077fcf8a847d6de5a301d34dc31286584b1dbb26d30d3adb5b4c41c1e8aea04371e926fda05c09c6253647c432e11d872a304ba#npm:5.2.0"],\
             ["@fastify/static", "npm:6.6.0"],\
             ["@tsconfig/node18", "npm:1.0.1"],\
-            ["@tsconfig/node18-strictest-esm", "npm:1.0.1"],\
             ["@types/node", "npm:18.11.18"],\
             ["@types/pg", "npm:8.6.6"],\
             ["argon2", "npm:0.30.2"],\
