@@ -40,11 +40,11 @@ create table if not exists "favourites" (
 create table if not exists "notes" (
 	"id" uuid primary key default gen_random_uuid(),
 	"user_id" uuid not null references "users"("id") on delete cascade,
-	"recipe_id" uuid not null references "recipe"("id") on delete cascade,
+	"recipe_id" uuid not null references "recipes"("id") on delete cascade,
 	"note" varchar not null
 );
 create table if not exists "tags" (
 	"id" uuid primary key default gen_random_uuid(),
-	"recipe_id" uuid not null references "recipe"("id") on delete cascade,
+	"recipe_id" uuid not null references "recipes"("id") on delete cascade,
 	"tag" varchar not null
 );
