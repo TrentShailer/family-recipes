@@ -17,7 +17,16 @@ def getVersion(){
 pipeline {
 	agent any
 
+	environment {
+		ENV_FILE = credentials('family-recipes-env')
+		DATABASE_ENV_FILE = credentials('family-recipes-database-env')
+	}
+
 	stages {
+		stage ('Write env files') {
+			writeFile file: '.env', text: env.ENV_FILE
+			writeFile file: 'database.env', text: env.DATABASE_ENV_FILE
+		}
 		stage ('Install Dependencies') {
 			steps {
 				sh 'yarn install'
