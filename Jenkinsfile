@@ -24,8 +24,10 @@ pipeline {
 
 	stages {
 		stage ('Write env files') {
-			writeFile file: '.env', text: env.ENV_FILE
-			writeFile file: 'database.env', text: env.DATABASE_ENV_FILE
+			steps {
+				writeFile file: '.env', text: env.ENV_FILE
+				writeFile file: 'database.env', text: env.DATABASE_ENV_FILE
+			}
 		}
 		stage ('Install Dependencies') {
 			steps {
