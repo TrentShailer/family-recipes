@@ -72,7 +72,7 @@ fastify.get("/test", async (request, reply) => {
     .send();
 });
 
-fastify.addHook("onRequest", async (request, reply, done) => {
+fastify.addHook("onRequest", async (request, reply) => {
   if (request.cookies.token) {
     try {
       const decoded = await request.jwtVerify();
