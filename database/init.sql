@@ -22,7 +22,7 @@ create table if not exists "recipes" (
 );
 create table if not exists "comments" (
 	"id" uuid primary key default gen_random_uuid(),
-	"user_id" uuid not null referneces "users"("id") on delete cascade,
+	"user_id" uuid not null references "users"("id") on delete cascade,
 	"recipe_id" uuid not null references "recipes"("id") on delete cascade,
 	"message" varchar not null,
 	"created_at" timestamptz not null default NOW()
