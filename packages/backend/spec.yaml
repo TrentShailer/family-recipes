@@ -1,0 +1,1655 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Family Recipes API"
+  description: API for family recipes web app
+  contact:
+    name: Trent Shailer
+    email: trent.shailer@gmail.com
+
+servers:
+  - url: https://recipes.trentshailer.com/api/v1
+    description: "API endpoint"
+
+paths:
+  "/session":
+    post:
+      summary: Create a session/login
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  $ref: "#/components/schemas/UserName"
+                password:
+                  $ref: "#/components/schemas/UserPassword"
+      responses:
+        200:
+          description: Success - logged in
+          headers:
+            Authorization:
+              description: "Header containing the JWT"
+              schema:
+                type: string
+        400:
+          description: Bad request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized - Username or password is incorrect
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a session/logout
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success - Logged out
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/users":
+    post:
+      summary: Create a new user
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  $ref: "#/components/schemas/UserName"
+                password:
+                  $ref: "#/components/schemas/UserPassword"
+      responses:
+        201:
+          description: Success - Created user
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: Invalid request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: Conflict - a user with name already exists
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+  "/users/{userId}":
+    get:
+      summary: Get user details
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: Bad request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a user
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+        400:
+          description: Bad request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserId"
+
+  "/users/{userId}/recipeBooks":
+    post:
+      summary: Make user an editor for a recipe book
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  $ref: "#/components/schemas/RecipeBookName"
+                password:
+                  $ref: "#/components/schemas/RecipeBookPassword"
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/RecipeBook"
+        400:
+          description: Bad request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized,
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: Conflict
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      summary: Get the recipe books the user is an editor for
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/UserRecipeBooks"
+        400:
+          description: Bad request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserId"
+  "/users/{userId}/recipeBooks/{recipeBookId}":
+    delete:
+      summary: Remove a user as an editor for a recipe book
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+        400:
+          description: Bad request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserId"
+      - name: recipeBookId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/RecipeBookId"
+  "/users/{userId}/recipes/{recipeId}/favourite":
+    put:
+      summary: Update if a recipe is a favourite
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - favourite
+              properties:
+                favourite:
+                  $ref: "#/components/schemas/RecipeFavourited"
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserId"
+      - name: recipeId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/RecipeId"
+  "/users/{userId}/recipes/{recipeId}/notes":
+    get:
+      summary: Get the user notes for a recipe
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/RecipePersonalNotes"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create user notes for a recipe
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/RecipePersonalNotes"
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: Conflict
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update user notes for a recipe
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/RecipePersonalNotes"
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete user notes for a recipe
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserId"
+      - name: recipeId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/RecipeId"
+
+  "/recipeBooks":
+    post:
+      summary: Create a recipe book
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  $ref: "#/components/schemas/RecipeBookName"
+                password:
+                  $ref: "#/components/schemas/RecipeBookPassword"
+      responses:
+        201:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/RecipeBook"
+        400:
+          description: Bad request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: Conflict
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/recipeBooks/{recipeBookId}":
+    get:
+      summary: Get a recipe book
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/RecipeBook"
+        400:
+          description: Bad request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a recipe book
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update a recipe book
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  $ref: "#/components/schemas/RecipeBookName"
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/RecipeBook"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: recipeBookId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/RecipeBookId"
+
+  "/recipeBooks/{recipeBookId}/recipes":
+    post:
+      summary: Add a new recipe to a recipe book
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+                - time
+                - servings
+                - ingredients
+                - steps
+                - author
+              properties:
+                name:
+                  $ref: "#/components/schemas/RecipeName"
+                time:
+                  $ref: "#/components/schemas/RecipeTime"
+                servings:
+                  $ref: "#/components/schemas/RecipeServings"
+                ingredients:
+                  $ref: "#/components/schemas/RecipeIngredients"
+                steps:
+                  $ref: "#/components/schemas/RecipeSteps"
+                author:
+                  $ref: "#/components/schemas/RecipeAuthor"
+                notes:
+                  $ref: "#/components/schemas/RecipeNotes"
+      responses:
+        201:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      summary: Get the recipes in a recipe book
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/RecipeBookRecipes"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: recipeBookId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/RecipeBookId"
+  "/recipes/{recipeId}":
+    get:
+      summary: Get the details of a recipe
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a recipe
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update a recipe
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+                - name
+                - time
+                - servings
+                - ingredients
+                - steps
+                - author
+              properties:
+                id:
+                  $ref: "#/components/schemas/RecipeId"
+                name:
+                  $ref: "#/components/schemas/RecipeName"
+                time:
+                  $ref: "#/components/schemas/RecipeTime"
+                servings:
+                  $ref: "#/components/schemas/RecipeServings"
+                ingredients:
+                  $ref: "#/components/schemas/RecipeIngredients"
+                steps:
+                  $ref: "#/components/schemas/RecipeSteps"
+                author:
+                  $ref: "#/components/schemas/RecipeAuthor"
+                notes:
+                  $ref: "#/components/schemas/RecipeNotes"
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: recipeId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/RecipeId"
+  "/recipes/{recipeId}/image":
+    get:
+      summary: Get an image for a recipe
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "image/jpeg":
+              schema:
+                type: string
+                format: binary
+        400:
+          description: Bad Requst
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete an image for a recipe
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+        400:
+          description: Bad Requst
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create an image for a recipe
+      security:
+        - http: []
+      requestBody:
+        content:
+          "image/jpeg":
+            schema:
+              type: string
+              format: binary
+      responses:
+        201:
+          description: Success
+          content:
+            "image/jpeg":
+              schema:
+                type: string
+                format: binary
+        400:
+          description: Bad Requst
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update an image for a recipe
+      security:
+        - http: []
+      requestBody:
+        content:
+          "image/jpeg":
+            schema:
+              type: string
+              format: binary
+      responses:
+        200:
+          description: Success
+          content:
+            "image/jpeg":
+              schema:
+                type: string
+                format: binary
+        400:
+          description: Bad Requst
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: recipeId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/RecipeId"
+
+  "/recipes/{recipeId}/comments":
+    get:
+      summary: Gets all the comments on a recipe
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Post a new comment on a recipe
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - userId
+                - message
+              properties:
+                userId:
+                  $ref: "#/components/schemas/UserId"
+                message:
+                  $ref: "#/components/schemas/CommentMessage"
+      responses:
+        201:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Comment"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: recipeId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/RecipeId"
+
+  "/recipes/{recipeId}/comments/{commentId}":
+    get:
+      summary: Get a comment
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Comment"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update a comment
+      security:
+        - http: []
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - userId
+                - message
+              properties:
+                userId:
+                  $ref: "#/components/schemas/UserId"
+                message:
+                  $ref: "#/components/schemas/CommentMessage"
+      responses:
+        200:
+          description: Success
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Comment"
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a comment
+      security:
+        - http: []
+      responses:
+        200:
+          description: Success
+        400:
+          description: Bad Request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    parameters:
+      - name: recipeId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/RecipeId"
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/CommentId"
+components:
+  schemas:
+    CommentId:
+      description: The unique identifier for a comment
+      type: string
+      format: uuid
+    CommentCreatedAt:
+      description: The milliseconds since epoch in UTC the comment was created at
+      type: integer
+    CommentMessage:
+      description: The content of a comment
+      type: string
+      format: markdown
+    CommentAuthor:
+      description: The author of a comment
+      type: string
+    Comment:
+      description: A comment on a recipe
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/CommentId"
+        author:
+          $ref: "#/components/schemas/CommentAuthor"
+        message:
+          $ref: "#/components/schemas/CommentMessage"
+        createdAt:
+          $ref: "#/components/schemas/CommentCreatedAt"
+
+    IngredientCategory:
+      type: object
+      properties:
+        name:
+          type: string
+        ingredients:
+          type: array
+          items:
+            type: string
+
+    RecipeId:
+      description: The unique identifier of a recipe
+      type: string
+      format: uuid
+    RecipeTags:
+      description: The tags for a given recipe
+      type: array
+      items:
+        type: string
+    RecipeName:
+      description: The name of a given recipe
+      type: string
+    RecipeFavourited:
+      description: Is the recipe favourited for this user
+      type: boolean
+    RecipeTime:
+      description: The time in minutes the recipe takes to finish
+      type: integer
+    RecipeServings:
+      description: The number of servings the recipe makes
+      type: integer
+    RecipeIngredients:
+      description: The list of ingredient categories and their ingredients for a recipe
+      type: array
+      items:
+        $ref: "#/components/schemas/IngredientCategory"
+    RecipeSteps:
+      description: The list of steps for a recipe
+      type: array
+      items:
+        type: string
+        format: markdown
+    RecipeAuthor:
+      description: The name of the user who created the recipe
+      type: string
+    RecipeNotes:
+      description: Additional notes for a recipe
+      type: string
+      format: markdown
+    RecipePersonalNotes:
+      description: The user's own personal notes for a recipe
+      type: string
+      format: markdown
+    Recipe:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/RecipeId"
+        tags:
+          $ref: "#/components/schemas/UserRecipeTags"
+        name:
+          $ref: "#/components/schemas/RecipeName"
+        favourited:
+          $ref: "#/components/schemas/RecipeFavourited"
+        time:
+          $ref: "#/components/schemas/RecipeTime"
+        servings:
+          $ref: "#/components/schemas/RecipeServings"
+        ingredients:
+          $ref: "#/components/schemas/RecipeIngredients"
+        steps:
+          $ref: "#/components/schemas/RecipeSteps"
+        author:
+          $ref: "#/components/schemas/RecipeAuthor"
+        notes:
+          $ref: "#/components/schemas/RecipeNotes"
+        personalNotes:
+          $ref: "#/components/schemas/RecipePersonalNotes"
+
+    RecipeBookId:
+      description: The unique identifier of a recipe book
+      type: string
+      format: uuid
+    RecipeBookName:
+      description: The name of the recipe book
+      type: string
+    RecipeBookPassword:
+      description: The password of the recipe book
+      type: string
+      format: password
+    RecipeBookRecipes:
+      description: The recipes contained in a recipe book
+      type: array
+      items:
+        $ref: "#/components/schemas/Recipe"
+    RecipeBook:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/RecipeBookId"
+        name:
+          $ref: "#/components/schemas/RecipeBookName"
+        password:
+          $ref: "#/components/schemas/RecipeBookPassword"
+        recipes:
+          $ref: "#/components/schemas/RecipeBookRecipes"
+
+    UserId:
+      description: The unique identifier of a user
+      type: string
+      format: uuid
+    UserName:
+      description: The user's name
+      type: string
+    UserPassword:
+      description: The user's password
+      type: string
+      format: password
+    UserRecipeBooks:
+      description: The recipe book Ids the user can edit
+      type: array
+      items:
+        $ref: "#/components/schemas/RecipeBookId"
+    User:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UserId"
+        name:
+          $ref: "#/components/schemas/UserName"
+        password:
+          $ref: "#/components/schemas/UserPassword"
+        recipeBooks:
+          $ref: "#/components/schemas/UserRecipeBooks"
+
+    Error:
+      type: object
+      required:
+        - message
+        - code
+      properties:
+        message:
+          description: A human readable error message
+          type: string
+        code:
+          type: string
+  securitySchemes:
+    http:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

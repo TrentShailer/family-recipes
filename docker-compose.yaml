@@ -1,0 +1,22 @@
+services:
+  server:
+    image: trentshailer/family-recipes:latest
+    env_file:
+      - ./.env
+    ports:
+      - 4002:8080
+    volumes:
+      - family-recipes-data:/etc/family-recipes
+    depends_on:
+      - database
+    restart: unless-stopped
+  database:
+    image: postgres:15
+    env_file:
+      - ./database.env
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - family-recipes-data:/var/lib/postgresql/data
+    restart: unless-stopped
+volumes:
+  family-recipes-data:
