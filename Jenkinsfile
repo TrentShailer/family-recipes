@@ -50,10 +50,7 @@ pipeline {
 				}
 			}
 			steps {
-				sh 'set -a'
-				sh 'source "$ENV_FILE"'
-				sh 'set +a'
-				sh 'docker compose -p family-recipes up -d'
+				sh 'docker compose -p family-recipes --env-file "$ENV_FILE" up -d'
 			}
 		}
 	}
