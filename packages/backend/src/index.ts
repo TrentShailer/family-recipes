@@ -57,10 +57,6 @@ fastify.register(fastifyJwt, {
   },
 });
 
-fastify.addHook("onRequest", (request) => {
-  request.jwtVerify();
-});
-
 fastify.register(fastifyStatic, {
   root: path.join(__dirname, "frontend"),
 });
