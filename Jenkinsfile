@@ -20,6 +20,8 @@ pipeline {
 	environment {
 		DOCKER_CREDS = credentials('docker-creds')
 		ENV_FILE = credentials('family-recipes-env')
+		DOCKER_IMAGE = 'trentshailer/family-recipes'
+		DOCKER_COMPOSE_PROJECT = 'family-recipes'
 	}
 
 	stages {
@@ -41,8 +43,14 @@ pipeline {
 		stage ('Docker Build') {
 			steps {
 				sh "docker login -u \"$DOCKER_CREDS_USR\" -p \"$DOCKER_CREDS_PSW\""
-				sh "docker build -t family-recipes:${getVersion()} ."
-				sh "docker tag family-recipes:${getVersion()} portfolio:latest"
+				sh "docker build -t $DOCKER_IMAGE:${getVersion()} ."
+				sh "docker tag $DOCKER_IMAGE:${getVersion()} $DOCKER_IMAGE:latest"
+			}
+		}
+		stage ('Docker Push') {
+			steps {
+				sh "docker push $DOCKER_IMAGE:${getVersion()}"
+				sh "docker push $DOCKER_IMAGE:latest"
 			}
 		}
 		stage('Deploy') {
@@ -52,7 +60,7 @@ pipeline {
 				}
 			}
 			steps {
-				sh 'docker compose -p family-recipes --env-file "$ENV_FILE" up -d'
+				sh "docker compose -p $DOCKER_COMPOSE_PROJECT --env-file \"$ENV_FILE\" up -d"
 			}
 		}
 	}

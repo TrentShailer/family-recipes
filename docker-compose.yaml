@@ -1,6 +1,6 @@
 services:
   server:
-    image: family-recipes:latest
+    image: trentshailer/family-recipes:latest
     environment:
       - DATABASE_URL
       - PRIVATE_KEY
