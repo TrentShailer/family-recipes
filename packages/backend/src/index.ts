@@ -5,6 +5,7 @@ import fastifyStatic from "@fastify/static";
 import fastifyPostgres from "@fastify/postgres";
 import fastifyAutoload from "@fastify/autoload";
 import fastifyJwt from "@fastify/jwt";
+import jwtAuth from "./auth/jwt-auth";
 import path from "path";
 import { exit } from "process";
 
@@ -50,13 +51,15 @@ fastify.register(fastifyJwt, {
   },
   sign: {
     algorithm: process.env.KEY_ALGORITHM,
-    expiresIn: "10s",
+    expiresIn: "14d",
   },
   cookie: {
     cookieName: "token",
     signed: false,
   },
 });
+
+fastify.register(jwtAuth);
 
 fastify.get("/test", async (request, reply) => {
   const token = await reply.jwtSign({ user: { id: "1" } });
@@ -88,9 +91,7 @@ fastify.addHook("onRequest", async (request, reply) => {
           sameSite: true,
         });
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   }
 });
 

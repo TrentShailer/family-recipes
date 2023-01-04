@@ -1807,6 +1807,7 @@ __metadata:
     argon2: ^0.30.2
     dotenv: ^16.0.3
     fastify: ^4.11.0
+    fastify-plugin: ^4.4.0
     pg: ^8.8.0
     typescript: ^4.9.4
   languageName: unknown
@@ -2975,7 +2976,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-plugin@npm:^4.0.0":
+"fastify-plugin@npm:^4.0.0, fastify-plugin@npm:^4.4.0":
   version: 4.4.0
   resolution: "fastify-plugin@npm:4.4.0"
   checksum: f61d6620a24e8c3c9e67305fffe5570d4c0580477fc0f11fd9397b3e11e2b28ea0873e80d2774fee3ad9d70a81a07a83cb0da61e92afc70f6c50bbb3fb91335d

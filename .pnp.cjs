@@ -2119,6 +2119,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["argon2", "npm:0.30.2"],\
             ["dotenv", "npm:16.0.3"],\
             ["fastify", "npm:4.11.0"],\
+            ["fastify-plugin", "npm:4.4.0"],\
             ["pg", "virtual:aa59773ac87791c4813d53447077fcf8a847d6de5a301d34dc31286584b1dbb26d30d3adb5b4c41c1e8aea04371e926fda05c09c6253647c432e11d872a304ba#npm:8.8.0"],\
             ["typescript", "patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=ad5954"]\
           ],\
