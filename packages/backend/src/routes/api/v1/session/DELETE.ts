@@ -3,7 +3,7 @@ import type { FastifyInstance, FastifySchema } from "fastify";
 const schema: FastifySchema = {};
 
 export default async function (fastify: FastifyInstance) {
-  fastify.post(
+  fastify.delete(
     "/",
     { schema, onRequest: [fastify.authenticate] },
     async (request, reply) => {

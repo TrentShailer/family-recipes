@@ -50,13 +50,11 @@ export default async function (fastify: FastifyInstance) {
         return reply.status(401).send(errorResponse);
       }
 
-      const payload = {
+      const token = await reply.jwtSign({
         user: {
           id: rows[0].id,
         },
-      };
-
-      const token = await reply.jwtSign(payload);
+      });
 
       return reply
         .setCookie("token", token, {
@@ -65,6 +63,7 @@ export default async function (fastify: FastifyInstance) {
           secure: true,
           httpOnly: true,
           sameSite: true,
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
         })
         .status(200)
         .send();
