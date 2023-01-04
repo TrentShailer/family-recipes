@@ -50,7 +50,7 @@ fastify.register(fastifyJwt, {
   },
   sign: {
     algorithm: process.env.KEY_ALGORITHM,
-    expiresIn: "14d",
+    expiresIn: "10s",
   },
   cookie: {
     cookieName: "token",
@@ -76,7 +76,18 @@ fastify.addHook("onRequest", async (request, reply) => {
   if (request.cookies.token) {
     try {
       const decoded = await request.jwtVerify();
-      console.log(decoded);
+      const exp = decoded.exp;
+      // if the token is within 7 day of expiring, refresh it
+      if (exp - Date.now() / 1000 < 60 * 60 * 24 * 7) {
+        const token = await reply.jwtSign({ user: { id: decoded.user.id } });
+        return reply.setCookie("token", token, {
+          domain: process.env.DOMAIN ?? "localhost",
+          path: "/",
+          secure: true,
+          httpOnly: true,
+          sameSite: true,
+        });
+      }
     } catch (error) {
       console.error(error);
     }

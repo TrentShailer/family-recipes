@@ -95,6 +95,13 @@ declare namespace fastifyJwt {
    * }
    * ```
    */
+
+  export interface Payload {
+    user: { id: string };
+    iat: number;
+    exp: number;
+  }
+
   export interface FastifyJWT {
     payload: {
       user: {
@@ -133,8 +140,8 @@ declare namespace fastifyJwt {
         tokenOrHeader: TokenOrHeader
       ) => Promise<string | Buffer>);
 
-  export type VerifyPayloadType = object | string;
-  export type DecodePayloadType = object | string;
+  export type VerifyPayloadType = Payload;
+  export type DecodePayloadType = Payload;
 
   export interface DecodeCallback<Decoded extends DecodePayloadType> {
     (err: Error, decoded: Decoded): void;
