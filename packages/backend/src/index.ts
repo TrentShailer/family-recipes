@@ -54,7 +54,7 @@ fastify.register(fastifyJwt, {
   },
   cookie: {
     cookieName: "token",
-    signed: true,
+    signed: false,
   },
 });
 
