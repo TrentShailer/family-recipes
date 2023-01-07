@@ -1,14 +1,14 @@
 import { FastifyPlugin, FastifyReply, FastifyRequest } from "fastify";
 interface PluginOptions {}
 
-export interface authenticate {
+export interface commentAccessAuth {
   (request: FastifyRequest, reply: FastifyReply): void;
 }
 
 declare module "fastify" {
   interface FastifyInstance {
-    authenticate: authenticate;
+    commentAccessAuth: commentAccessAuth;
   }
 }
-export const jwtAuth: FastifyPlugin<PluginOptions>;
-export default jwtAuth;
+export const commentAccessAuth: FastifyPlugin<PluginOptions>;
+export default commentAccessAuth;

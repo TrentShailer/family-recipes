@@ -43,8 +43,7 @@ pipeline {
 		stage ('Docker Build') {
 			steps {
 				sh "docker login -u \"$DOCKER_CREDS_USR\" -p \"$DOCKER_CREDS_PSW\""
-				sh "docker build -t $DOCKER_IMAGE:${getVersion()} ."
-				sh "docker tag $DOCKER_IMAGE:${getVersion()} $DOCKER_IMAGE:latest"
+				sh "docker build -t $DOCKER_IMAGE:${getVersion()} -t $DOCKER_IMAGE:latest ."
 			}
 		}
 		stage ('Docker Push') {

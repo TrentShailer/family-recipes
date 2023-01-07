@@ -97,19 +97,17 @@ declare namespace fastifyJwt {
    */
 
   export interface Payload {
-    user: { id: string };
+    userId: string;
     iat: number;
     exp: number;
   }
 
   export interface FastifyJWT {
     payload: {
-      user: {
-        id: string;
-      };
+      userId: string;
     };
     user: {
-      id: string;
+      userId: string;
     };
   }
 

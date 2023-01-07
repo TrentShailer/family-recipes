@@ -5,9 +5,19 @@ import fastifyStatic from "@fastify/static";
 import fastifyPostgres from "@fastify/postgres";
 import fastifyAutoload from "@fastify/autoload";
 import fastifyJwt from "@fastify/jwt";
+import fastifyUpload from "fastify-file-upload";
 import jwtAuth from "./auth/jwt-auth";
+import recipeAccessAuth from "./auth/recipe-access-auth";
+import userAccessAuth from "./auth/user-access-auth";
+import recipeBookAccessAuth from "./auth/recipe-book-access-auth";
+import commentAccessAuth from "./auth/comment-access-auth";
 import path from "path";
 import { exit } from "process";
+
+if (process.env.INSECURE) {
+  console.log("WARNING: Insecure mode is enabled");
+  console.log("WARNING: This should only be used for development");
+}
 
 if (!process.env.DATABASE_URL) {
   console.log("Environment variable DATABASE_URL is not set");
@@ -57,23 +67,24 @@ fastify.register(fastifyJwt, {
     cookieName: "token",
     signed: false,
   },
+  messages: {
+    noAuthorizationInHeaderMessage: "Not authorized",
+    noAuthorizationInCookieMessage: "Not authorized",
+    authorizationTokenExpiredMessage: "Not authorized",
+    invalidAuthorizationTokenMessage: "Not authorized",
+  },
+});
+
+fastify.register(fastifyUpload, {
+  useTempFiles: true,
+  tempFileDir: path.join(__dirname, "temp"),
 });
 
 fastify.register(jwtAuth);
-
-fastify.get("/test", async (request, reply) => {
-  const token = await reply.jwtSign({ user: { id: "1" } });
-  return reply
-    .setCookie("token", token, {
-      domain: process.env.DOMAIN ?? "localhost",
-      path: "/",
-      secure: true,
-      httpOnly: true,
-      sameSite: true,
-    })
-    .status(200)
-    .send();
-});
+fastify.register(userAccessAuth);
+fastify.register(recipeAccessAuth);
+fastify.register(recipeBookAccessAuth);
+fastify.register(commentAccessAuth);
 
 fastify.addHook("onRequest", async (request, reply) => {
   if (request.cookies.token) {
@@ -82,11 +93,11 @@ fastify.addHook("onRequest", async (request, reply) => {
       const exp = decoded.exp;
       // if the token is within 7 day of expiring, refresh it
       if (exp - Date.now() / 1000 < 60 * 60 * 24 * 7) {
-        const token = await reply.jwtSign({ user: { id: decoded.user.id } });
+        const token = await reply.jwtSign({ userId: decoded.userId });
         return reply.setCookie("token", token, {
           domain: process.env.DOMAIN ?? "localhost",
           path: "/",
-          secure: true,
+          secure: process.env.INSECURE ? false : true,
           httpOnly: true,
           sameSite: true,
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
@@ -100,7 +111,10 @@ fastify.register(fastifyStatic, {
   root: path.join(__dirname, "frontend"),
 });
 
-fastify.register(fastifyAutoload, { dir: path.join(__dirname, "routes") });
+fastify.register(fastifyAutoload, {
+  dir: path.join(__dirname, "routes"),
+  routeParams: true,
+});
 
 fastify.listen({ port: 8080, host: "0.0.0.0" }, async (err, address) => {
   if (err) {

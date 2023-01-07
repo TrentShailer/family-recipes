@@ -8,6 +8,7 @@ services:
       - KEY_ALGORITHM
       - COOKIE_SECRET
       - DOMAIN
+      - INSECURE
     ports:
       - 4002:8080
     volumes:

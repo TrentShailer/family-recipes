@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifySchema } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifySchema } from "fastify";
 import * as argon2 from "argon2";
 
 interface Body {
@@ -17,21 +17,44 @@ const schema: FastifySchema = {
   },
 };
 
-export default async function (fastify: FastifyInstance) {
-  fastify.post<{ Body: Body }>("/", { schema }, async (request, reply) => {
-    try {
-      const { name, password } = request.body;
-      const { rows, rowCount } = await fastify.pg.query<Database.User>(
-        `
+const GetUser = async (
+  fastify: FastifyInstance,
+  name: string
+): Promise<Database.User | null> => {
+  const { rows } = await fastify.pg.query<Database.User>(
+    `
 			SELECT
 				id, name, password
 			FROM users
 			WHERE name = $1;
 			`,
-        [name]
-      );
+    [name]
+  );
 
-      if (rowCount === 0 || rows[0] === undefined) {
+  return rows[0] || null;
+};
+
+const SetJWT = async (reply: FastifyReply, user: Reply.User) => {
+  const token = await reply.jwtSign({ userId: user.id });
+
+  reply.setCookie("token", token, {
+    domain: process.env.DOMAIN ?? "localhost",
+    path: "/",
+    secure: process.env.INSECURE ? false : true,
+    httpOnly: true,
+    sameSite: true,
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
+  });
+};
+
+export default async function (fastify: FastifyInstance) {
+  fastify.post<{ Body: Body }>("/", { schema }, async (request, reply) => {
+    try {
+      const { name, password } = request.body;
+
+      const user = await GetUser(fastify, name);
+
+      if (!user) {
         const errorResponse: FamilyRecipes.Error = {
           message: "Username or password incorrect.",
           code: "401",
@@ -39,7 +62,7 @@ export default async function (fastify: FastifyInstance) {
         return reply.status(401).send(errorResponse);
       }
 
-      const hashedPassword = rows[0].password;
+      const hashedPassword = user.password;
       const correctPassword = await argon2.verify(hashedPassword, password);
 
       if (!correctPassword) {
@@ -50,29 +73,14 @@ export default async function (fastify: FastifyInstance) {
         return reply.status(401).send(errorResponse);
       }
 
-      const token = await reply.jwtSign({
-        user: {
-          id: rows[0].id,
-        },
-      });
+      await SetJWT(reply, user);
 
-      return reply
-        .setCookie("token", token, {
-          domain: process.env.DOMAIN ?? "localhost",
-          path: "/",
-          secure: true,
-          httpOnly: true,
-          sameSite: true,
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
-        })
-        .status(200)
-        .send();
+      return reply.status(201).send();
     } catch (error) {
-      console.error(error);
+      fastify.log.error(error);
 
       const errorResponse: FamilyRecipes.Error = {
-        message:
-          "Something went wrong when trying to log you in, please try again.",
+        message: "Something went wrong when trying to log you in.",
         code: "500",
       };
       return reply.status(500).send(errorResponse);

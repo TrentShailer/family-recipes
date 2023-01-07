@@ -18,6 +18,7 @@ declare namespace Database {
 
   export type Recipe = {
     id: string;
+    recipe_book_id: string;
     name: string;
     time: string;
     servings: string;
@@ -26,6 +27,19 @@ declare namespace Database {
     author: string;
     notes: string | null | undefined;
     created_at: Date;
+  };
+
+  export type Favourite = {
+    id: string;
+    user_id: string;
+    recipe_id: string;
+  };
+
+  export type Note = {
+    id: string;
+    user_id: string;
+    recipe_id: string;
+    note: string;
   };
 
   export type Comment = {
