@@ -1,3 +1,5 @@
+import { init } from "./helpers/tracing";
+init("family-recipes", "production");
 import * as dotenv from "dotenv";
 dotenv.config();
 import Fastify from "fastify";
