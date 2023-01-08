@@ -44,7 +44,7 @@ const CreateComment = async (
 			user_id,
 			recipe_id,
 			comment,
-			created_at,`,
+			created_at;`,
     [userId, recipeId, comment]
   );
 

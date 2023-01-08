@@ -6,8 +6,8 @@ type Params = {
 
 type Body = {
   name: string;
-  time: string;
-  servings: string;
+  time: number;
+  servings: number;
   ingredients: Database.IngredientCategory[];
   steps: string[];
   author: string;
@@ -27,8 +27,8 @@ const schema: FastifySchema = {
     required: ["name", "time", "servings", "ingredients", "steps", "author"],
     properties: {
       name: { type: "string" },
-      time: { type: "string" },
-      servings: { type: "string" },
+      time: { type: "number" },
+      servings: { type: "number" },
       ingredients: {
         type: "array",
         items: {
@@ -37,7 +37,10 @@ const schema: FastifySchema = {
           properties: {
             name: { type: "string" },
             ingredients: {
-              type: "string",
+              type: "array",
+              items: {
+                type: "string",
+              },
             },
           },
         },

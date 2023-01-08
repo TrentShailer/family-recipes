@@ -59,6 +59,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/busboy@npm:^1.0.0":
+  version: 1.2.0
+  resolution: "@fastify/busboy@npm:1.2.0"
+  dependencies:
+    text-decoding: ^1.0.0
+  checksum: d167bd1d2b71a50571bd560d7448efc5ad728eb27563e94049c566aa18030e1d01814f3ba4f8e9c6bf3c9050a387c124d94a08ec6a28cf8703f9536ae341ab60
+  languageName: node
+  linkType: hard
+
 "@fastify/cookie@npm:^8.3.0":
   version: 8.3.0
   resolution: "@fastify/cookie@npm:8.3.0"
@@ -1424,13 +1433,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.11.0":
-  version: 16.18.11
-  resolution: "@types/node@npm:16.18.11"
-  checksum: 2a3b1da13063debe6e26f732defb5f03ef4ef732c3e08daba838d8850433bd00e537ce1a97ce9bcfc4b15db5218d701d1265fae94e0d6926906bec157e6b46e0
-  languageName: node
-  linkType: hard
-
 "@types/normalize-package-data@npm:^2.4.0":
   version: 2.4.1
   resolution: "@types/normalize-package-data@npm:2.4.1"
@@ -1642,6 +1644,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"append-field@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "append-field@npm:1.0.0"
+  checksum: 482ba08acc0ecef00fe7da6bf2f8e48359a9905ee1af525f3120c9260c02e91eedf0579b59d898e8d8455b6c199e340bc0a2fd4b9e02adaa29a8a86c722b37f9
+  languageName: node
+  linkType: hard
+
 "aproba@npm:^1.0.3 || ^2.0.0, aproba@npm:^2.0.0":
   version: 2.0.0
   resolution: "aproba@npm:2.0.0"
@@ -1824,7 +1833,7 @@ __metadata:
     argon2: ^0.30.2
     dotenv: ^16.0.3
     fastify: ^4.11.0
-    fastify-file-upload: ^4.0.0
+    fastify-multer: ^2.0.3
     fastify-plugin: ^4.4.0
     pg: ^8.8.0
     sharp: ^0.31.3
@@ -1967,15 +1976,6 @@ __metadata:
   dependencies:
     semver: ^7.0.0
   checksum: 66d204657fe36522822a95b288943ad11b58f5eaede235b11d8c4edaa28ce4800087d44a2681524c340494aadb120a0068011acabe99d30e8f11a7d826d83515
-  languageName: node
-  linkType: hard
-
-"busboy@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "busboy@npm:1.6.0"
-  dependencies:
-    streamsearch: ^1.1.0
-  checksum: 32801e2c0164e12106bf236291a00795c3c4e4b709ae02132883fe8478ba2ae23743b11c5735a0aae8afe65ac4b6ca4568b91f0d9fed1fdbc32ede824a73746e
   languageName: node
   linkType: hard
 
@@ -2922,15 +2922,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-fileupload@npm:^1.3.1":
-  version: 1.4.0
-  resolution: "express-fileupload@npm:1.4.0"
-  dependencies:
-    busboy: ^1.6.0
-  checksum: 4dad1dab1279eab72412857c3bb6b364f86ae512ac760cb4ae140e7f5793daefd2656c2a7cc60033a476d7267ab9d89ac85b2106ce9d5697ec5d3ba9c315ac6f
-  languageName: node
-  linkType: hard
-
 "external-editor@npm:^3.0.3":
   version: 3.1.0
   resolution: "external-editor@npm:3.1.0"
@@ -3063,22 +3054,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify-file-upload@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "fastify-file-upload@npm:4.0.0"
+"fastify-multer@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "fastify-multer@npm:2.0.3"
   dependencies:
-    "@types/node": ^16.11.0
-    express-fileupload: ^1.3.1
-    fastify-plugin: ^3.0.1
-    middie: ^6.0.0
-  checksum: e5916a6aed57d11b55b65423691e0767693da2c45096f49354f7fb5e3b33eed706aef62cf023fe261d0a1d93f325f9504e4d25b359f5496a46ba7e07a6785049
+    "@fastify/busboy": ^1.0.0
+    append-field: ^1.0.0
+    concat-stream: ^2.0.0
+    fastify-plugin: ^2.0.1
+    mkdirp: ^1.0.4
+    on-finished: ^2.3.0
+    type-is: ~1.6.18
+    xtend: ^4.0.2
+  checksum: 88756fac00b358b9f9209a559c2c1efd8a8418a989dc4f54229f6b17407fde4468ac0c5e48912b7f648a4e120cb812942b1ceca22a5814d264b64a312b84fd1a
   languageName: node
   linkType: hard
 
-"fastify-plugin@npm:^3.0.0, fastify-plugin@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "fastify-plugin@npm:3.0.1"
-  checksum: 131ba0a388f777829c3fb0fd5b75cf057688ce6d0ca354fb1ebf829767a8c853b0825762b9185b5200097454df0ede2f3095da2efe1aa1b3736d07f194e6d374
+"fastify-plugin@npm:^2.0.1":
+  version: 2.3.4
+  resolution: "fastify-plugin@npm:2.3.4"
+  dependencies:
+    semver: ^7.3.2
+  checksum: 19ce9ec783c2c59c56a8a4854bba15367c447fc74ff300ccaefa99276f2d009854626425df2346aa4cbe9f09617b88bfd080f922056771ccec2d0bca505afed1
   languageName: node
   linkType: hard
 
@@ -4423,6 +4420,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"media-typer@npm:0.3.0":
+  version: 0.3.0
+  resolution: "media-typer@npm:0.3.0"
+  checksum: af1b38516c28ec95d6b0826f6c8f276c58aec391f76be42aa07646b4e39d317723e869700933ca6995b056db4b09a78c92d5440dc23657e6764be5d28874bba1
+  languageName: node
+  linkType: hard
+
 "meow@npm:^8.0.0":
   version: 8.1.2
   resolution: "meow@npm:8.1.2"
@@ -4466,17 +4470,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"middie@npm:^6.0.0":
-  version: 6.1.0
-  resolution: "middie@npm:6.1.0"
-  dependencies:
-    fastify-plugin: ^3.0.0
-    path-to-regexp: ^6.1.0
-    reusify: ^1.0.4
-  checksum: dbc6fd5d9891ddc0774dd26fa455e52b042f9a9918bb2fe98ba3784b45a4961bb5ab029e790788589c2d90e7ddaf10b606ae549ec5327080a1cfaaacfaf25ce6
-  languageName: node
-  linkType: hard
-
 "mime-db@npm:1.52.0":
   version: 1.52.0
   resolution: "mime-db@npm:1.52.0"
@@ -4484,7 +4477,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.1.12":
+"mime-types@npm:^2.1.12, mime-types@npm:~2.1.24":
   version: 2.1.35
   resolution: "mime-types@npm:2.1.35"
   dependencies:
@@ -5118,7 +5111,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"on-finished@npm:2.4.1":
+"on-finished@npm:2.4.1, on-finished@npm:^2.3.0":
   version: 2.4.1
   resolution: "on-finished@npm:2.4.1"
   dependencies:
@@ -5443,13 +5436,6 @@ __metadata:
   version: 1.0.7
   resolution: "path-parse@npm:1.0.7"
   checksum: 49abf3d81115642938a8700ec580da6e830dde670be21893c62f4e10bd7dd4c3742ddc603fe24f898cba7eb0c6bc1777f8d9ac14185d34540c6d4d80cd9cae8a
-  languageName: node
-  linkType: hard
-
-"path-to-regexp@npm:^6.1.0":
-  version: 6.2.1
-  resolution: "path-to-regexp@npm:6.2.1"
-  checksum: f0227af8284ea13300f4293ba111e3635142f976d4197f14d5ad1f124aebd9118783dd2e5f1fe16f7273743cc3dbeddfb7493f237bb27c10fdae07020cc9b698
   languageName: node
   linkType: hard
 
@@ -6241,7 +6227,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8":
+"semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8":
   version: 7.3.8
   resolution: "semver@npm:7.3.8"
   dependencies:
@@ -6534,13 +6520,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"streamsearch@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "streamsearch@npm:1.1.0"
-  checksum: 1cce16cea8405d7a233d32ca5e00a00169cc0e19fbc02aa839959985f267335d435c07f96e5e0edd0eadc6d39c98d5435fb5bbbdefc62c41834eadc5622ad942
-  languageName: node
-  linkType: hard
-
 "string-width@npm:^1.0.2 || 2 || 3 || 4, string-width@npm:^4.1.0, string-width@npm:^4.2.0, string-width@npm:^4.2.3":
   version: 4.2.3
   resolution: "string-width@npm:4.2.3"
@@ -6704,6 +6683,13 @@ __metadata:
   version: 1.0.0
   resolution: "temp-dir@npm:1.0.0"
   checksum: cb2b58ddfb12efa83e939091386ad73b425c9a8487ea0095fe4653192a40d49184a771a1beba99045fbd011e389fd563122d79f54f82be86a55620667e08a6b2
+  languageName: node
+  linkType: hard
+
+"text-decoding@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "text-decoding@npm:1.0.0"
+  checksum: 4b2359d8efdabea72ac470304e991913e9b82a55b1c33ab5204f115d11305ac5900add80aee5f7d22b2bcf0faebaf35b193d28a10b74adf175d9ac9d63604445
   languageName: node
   linkType: hard
 
@@ -6871,6 +6857,16 @@ __metadata:
   version: 0.8.1
   resolution: "type-fest@npm:0.8.1"
   checksum: d61c4b2eba24009033ae4500d7d818a94fd6d1b481a8111612ee141400d5f1db46f199c014766b9fa9b31a6a7374d96fc748c6d688a78a3ce5a33123839becb7
+  languageName: node
+  linkType: hard
+
+"type-is@npm:~1.6.18":
+  version: 1.6.18
+  resolution: "type-is@npm:1.6.18"
+  dependencies:
+    media-typer: 0.3.0
+    mime-types: ~2.1.24
+  checksum: 2c8e47675d55f8b4e404bcf529abdf5036c537a04c2b20177bcf78c9e3c1da69da3942b1346e6edb09e823228c0ee656ef0e033765ec39a70d496ef601a0c657
   languageName: node
   linkType: hard
 

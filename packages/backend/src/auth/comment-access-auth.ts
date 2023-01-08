@@ -15,7 +15,6 @@ const plugin = fp(async function (fastify: FastifyInstance) {
         if (
           typeof request.params === "object" &&
           request.params !== null &&
-          "userId" in request.params &&
           "commentId" in request.params
         ) {
           const commentId = request.params.commentId;
@@ -50,6 +49,8 @@ const plugin = fp(async function (fastify: FastifyInstance) {
             };
             return reply.status(403).send(errorResponse);
           }
+        } else {
+          throw new Error("Invalid request parameters.");
         }
       } catch (error) {
         fastify.log.error(error);

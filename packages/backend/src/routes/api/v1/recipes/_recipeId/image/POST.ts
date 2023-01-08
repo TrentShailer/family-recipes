@@ -1,12 +1,11 @@
 import type { FastifyInstance, FastifySchema } from "fastify";
+import { upload } from "../../../../../..";
 import { Compress, CreateImage } from "../../../../../../helpers/image-helper";
+import fs from "fs";
+import path from "path";
 
 type Params = {
   recipeId: string;
-};
-
-type Body = {
-  file: UploadedFile;
 };
 
 const schema: FastifySchema = {
@@ -17,25 +16,34 @@ const schema: FastifySchema = {
       recipeId: { type: "string" },
     },
   },
-  body: {
-    type: "object",
-    required: ["file"],
-    properties: {
-      file: {
-        type: "object",
-      },
-    },
-  },
 };
 
 export default async function (fastify: FastifyInstance) {
-  fastify.post<{ Params: Params; Body: Body }>(
+  fastify.post<{ Params: Params }>(
     "/",
-    { schema, onRequest: [fastify.jwtAuth, fastify.recipeAccessAuth] },
+    {
+      schema,
+      onRequest: [fastify.jwtAuth, fastify.recipeAccessAuth],
+      preHandler: upload.single("image"),
+    },
     async (request, reply) => {
       try {
-        const compressed = await Compress(request.body.file.data);
+        if (!request.file.destination || !request.file.filename) {
+          const errorResponse: FamilyRecipes.Error = {
+            message: "No file was uploaded.",
+            code: "400",
+          };
+          return reply.status(400).send(errorResponse);
+        }
+
+        const file = path.join(request.file.destination, request.file.filename);
+
+        const buffer = fs.readFileSync(file);
+
+        const compressed = await Compress(buffer);
         await CreateImage(fastify, request.params.recipeId, compressed);
+
+        fs.unlinkSync(file);
 
         reply.status(200).send();
       } catch (error) {

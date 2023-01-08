@@ -102,6 +102,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@fastify/busboy", [\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/@fastify-busboy-npm-1.2.0-05f1975527-d167bd1d2b.zip/node_modules/@fastify/busboy/",\
+          "packageDependencies": [\
+            ["@fastify/busboy", "npm:1.2.0"],\
+            ["text-decoding", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@fastify/cookie", [\
         ["npm:8.3.0", {\
           "packageLocation": "./.yarn/cache/@fastify-cookie-npm-8.3.0-d4b09e29b0-d5dfb5c85d.zip/node_modules/@fastify/cookie/",\
@@ -1669,13 +1679,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@types/node", [\
-        ["npm:16.18.11", {\
-          "packageLocation": "./.yarn/cache/@types-node-npm-16.18.11-c70c49ef8e-2a3b1da130.zip/node_modules/@types/node/",\
-          "packageDependencies": [\
-            ["@types/node", "npm:16.18.11"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:18.11.18", {\
           "packageLocation": "./.yarn/cache/@types-node-npm-18.11.18-d61e8a4a20-03f17f9480.zip/node_modules/@types/node/",\
           "packageDependencies": [\
@@ -1927,6 +1930,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["append-field", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/append-field-npm-1.0.0-bb98be199c-482ba08acc.zip/node_modules/append-field/",\
+          "packageDependencies": [\
+            ["append-field", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["aproba", [\
         ["npm:2.0.0", {\
           "packageLocation": "./.yarn/cache/aproba-npm-2.0.0-8716bcfde6-5615cadcfb.zip/node_modules/aproba/",\
@@ -2137,7 +2149,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["argon2", "npm:0.30.2"],\
             ["dotenv", "npm:16.0.3"],\
             ["fastify", "npm:4.11.0"],\
-            ["fastify-file-upload", "npm:4.0.0"],\
+            ["fastify-multer", "npm:2.0.3"],\
             ["fastify-plugin", "npm:4.4.0"],\
             ["pg", "virtual:aa59773ac87791c4813d53447077fcf8a847d6de5a301d34dc31286584b1dbb26d30d3adb5b4c41c1e8aea04371e926fda05c09c6253647c432e11d872a304ba#npm:8.8.0"],\
             ["sharp", "npm:0.31.3"],\
@@ -2298,16 +2310,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["builtins", "npm:5.0.1"],\
             ["semver", "npm:7.3.8"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["busboy", [\
-        ["npm:1.6.0", {\
-          "packageLocation": "./.yarn/cache/busboy-npm-1.6.0-ebb5cbb04b-32801e2c01.zip/node_modules/busboy/",\
-          "packageDependencies": [\
-            ["busboy", "npm:1.6.0"],\
-            ["streamsearch", "npm:1.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -3398,16 +3400,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["express-fileupload", [\
-        ["npm:1.4.0", {\
-          "packageLocation": "./.yarn/cache/express-fileupload-npm-1.4.0-000c52139e-4dad1dab12.zip/node_modules/express-fileupload/",\
-          "packageDependencies": [\
-            ["express-fileupload", "npm:1.4.0"],\
-            ["busboy", "npm:1.6.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["external-editor", [\
         ["npm:3.1.0", {\
           "packageLocation": "./.yarn/cache/external-editor-npm-3.1.0-878e7807af-1c2a616a73.zip/node_modules/external-editor/",\
@@ -3583,24 +3575,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["fastify-file-upload", [\
-        ["npm:4.0.0", {\
-          "packageLocation": "./.yarn/cache/fastify-file-upload-npm-4.0.0-67dbeef83b-e5916a6aed.zip/node_modules/fastify-file-upload/",\
+      ["fastify-multer", [\
+        ["npm:2.0.3", {\
+          "packageLocation": "./.yarn/cache/fastify-multer-npm-2.0.3-de4a68a304-88756fac00.zip/node_modules/fastify-multer/",\
           "packageDependencies": [\
-            ["fastify-file-upload", "npm:4.0.0"],\
-            ["@types/node", "npm:16.18.11"],\
-            ["express-fileupload", "npm:1.4.0"],\
-            ["fastify-plugin", "npm:3.0.1"],\
-            ["middie", "npm:6.1.0"]\
+            ["fastify-multer", "npm:2.0.3"],\
+            ["@fastify/busboy", "npm:1.2.0"],\
+            ["append-field", "npm:1.0.0"],\
+            ["concat-stream", "npm:2.0.0"],\
+            ["fastify-plugin", "npm:2.3.4"],\
+            ["mkdirp", "npm:1.0.4"],\
+            ["on-finished", "npm:2.4.1"],\
+            ["type-is", "npm:1.6.18"],\
+            ["xtend", "npm:4.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
       ]],\
       ["fastify-plugin", [\
-        ["npm:3.0.1", {\
-          "packageLocation": "./.yarn/cache/fastify-plugin-npm-3.0.1-30a545741d-131ba0a388.zip/node_modules/fastify-plugin/",\
+        ["npm:2.3.4", {\
+          "packageLocation": "./.yarn/cache/fastify-plugin-npm-2.3.4-526bc79215-19ce9ec783.zip/node_modules/fastify-plugin/",\
           "packageDependencies": [\
-            ["fastify-plugin", "npm:3.0.1"]\
+            ["fastify-plugin", "npm:2.3.4"],\
+            ["semver", "npm:7.3.8"]\
           ],\
           "linkType": "HARD"\
         }],\
@@ -5051,6 +5048,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["media-typer", [\
+        ["npm:0.3.0", {\
+          "packageLocation": "./.yarn/cache/media-typer-npm-0.3.0-8674f8f0f5-af1b38516c.zip/node_modules/media-typer/",\
+          "packageDependencies": [\
+            ["media-typer", "npm:0.3.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["meow", [\
         ["npm:8.1.2", {\
           "packageLocation": "./.yarn/cache/meow-npm-8.1.2-bcfe48d4f3-bc23bf1b44.zip/node_modules/meow/",\
@@ -5096,18 +5102,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["micromatch", "npm:4.0.5"],\
             ["braces", "npm:3.0.2"],\
             ["picomatch", "npm:2.3.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["middie", [\
-        ["npm:6.1.0", {\
-          "packageLocation": "./.yarn/cache/middie-npm-6.1.0-476f31ff34-dbc6fd5d98.zip/node_modules/middie/",\
-          "packageDependencies": [\
-            ["middie", "npm:6.1.0"],\
-            ["fastify-plugin", "npm:3.0.1"],\
-            ["path-to-regexp", "npm:6.2.1"],\
-            ["reusify", "npm:1.0.4"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6166,15 +6160,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/path-parse-npm-1.0.7-09564527b7-49abf3d811.zip/node_modules/path-parse/",\
           "packageDependencies": [\
             ["path-parse", "npm:1.0.7"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["path-to-regexp", [\
-        ["npm:6.2.1", {\
-          "packageLocation": "./.yarn/cache/path-to-regexp-npm-6.2.1-8ebfe03654-f0227af828.zip/node_modules/path-to-regexp/",\
-          "packageDependencies": [\
-            ["path-to-regexp", "npm:6.2.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -7408,15 +7393,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["streamsearch", [\
-        ["npm:1.1.0", {\
-          "packageLocation": "./.yarn/cache/streamsearch-npm-1.1.0-fc3ad6536d-1cce16cea8.zip/node_modules/streamsearch/",\
-          "packageDependencies": [\
-            ["streamsearch", "npm:1.1.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["string-width", [\
         ["npm:4.2.3", {\
           "packageLocation": "./.yarn/cache/string-width-npm-4.2.3-2c27177bae-e52c10dc3f.zip/node_modules/string-width/",\
@@ -7594,6 +7570,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/temp-dir-npm-1.0.0-5828254ce3-cb2b58ddfb.zip/node_modules/temp-dir/",\
           "packageDependencies": [\
             ["temp-dir", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["text-decoding", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/text-decoding-npm-1.0.0-8c4bf7ef78-4b2359d8ef.zip/node_modules/text-decoding/",\
+          "packageDependencies": [\
+            ["text-decoding", "npm:1.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -7783,6 +7768,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/type-fest-npm-0.8.1-351ad028fe-d61c4b2eba.zip/node_modules/type-fest/",\
           "packageDependencies": [\
             ["type-fest", "npm:0.8.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["type-is", [\
+        ["npm:1.6.18", {\
+          "packageLocation": "./.yarn/cache/type-is-npm-1.6.18-6dee4d4961-2c8e47675d.zip/node_modules/type-is/",\
+          "packageDependencies": [\
+            ["type-is", "npm:1.6.18"],\
+            ["media-typer", "npm:0.3.0"],\
+            ["mime-types", "npm:2.1.35"]\
           ],\
           "linkType": "HARD"\
         }]\

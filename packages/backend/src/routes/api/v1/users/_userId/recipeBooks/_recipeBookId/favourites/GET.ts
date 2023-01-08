@@ -24,22 +24,22 @@ const getFavourites = async (
   const { rows } = await fastify.pg.query<Reply.Favourite>(
     `
 		SELECT
-			id,
-			recipe_id AS "recipeId",
-			user_id AS "userId"
-		FROM recipes
-		WHERE recipe_book_id = $1
-		AND user_id = $2
-		INNER JOIN favourites ON favourites.recipe_id = recipes.id;
+			favourites.id,
+			favourites.recipe_id AS "recipeId",
+			favourites.user_id AS "userId"
+		FROM favourites
+		INNER JOIN recipes ON recipes.id = favourites.recipe_id
+		WHERE favourites.user_id = $1 AND recipes.recipe_book_id = $2
+		ORDER BY recipes.name;
 		`,
-    [recipeBookId, userId]
+    [userId, recipeBookId]
   );
 
   return rows;
 };
 
 export default async function (fastify: FastifyInstance) {
-  fastify.post<{ Params: Params }>(
+  fastify.get<{ Params: Params }>(
     "/",
     {
       schema,

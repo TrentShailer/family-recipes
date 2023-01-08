@@ -34,7 +34,8 @@ const UpdateComment = async (
   comment: string
 ): Promise<Reply.Comment | null> => {
   const { rows } = await fastify.pg.query<Reply.Comment>(
-    `UPDATE comments
+    `
+		UPDATE comments
 		SET
 			comment = $1
 		WHERE
@@ -46,7 +47,7 @@ const UpdateComment = async (
 			user_id,
 			recipe_id,
 			comment,
-			created_at,`,
+			created_at;`,
     [comment, commentId, userId, recipeId]
   );
 
@@ -56,7 +57,14 @@ const UpdateComment = async (
 export default async function (fastify: FastifyInstance) {
   fastify.put<{ Params: Params; Body: Body }>(
     "/",
-    { schema, onRequest: [fastify.jwtAuth, fastify.recipeAccessAuth] },
+    {
+      schema,
+      onRequest: [
+        fastify.jwtAuth,
+        fastify.recipeAccessAuth,
+        fastify.commentAccessAuth,
+      ],
+    },
     async (request, reply) => {
       try {
         const userId = request.user.userId;

@@ -5,7 +5,7 @@ import fastifyStatic from "@fastify/static";
 import fastifyPostgres from "@fastify/postgres";
 import fastifyAutoload from "@fastify/autoload";
 import fastifyJwt from "@fastify/jwt";
-import fastifyUpload from "fastify-file-upload";
+import fastifyMulter from "fastify-multer";
 import jwtAuth from "./auth/jwt-auth";
 import recipeAccessAuth from "./auth/recipe-access-auth";
 import userAccessAuth from "./auth/user-access-auth";
@@ -13,6 +13,23 @@ import recipeBookAccessAuth from "./auth/recipe-book-access-auth";
 import commentAccessAuth from "./auth/comment-access-auth";
 import path from "path";
 import { exit } from "process";
+import fs from "fs";
+// create folder for uploads if it doesn't exist
+if (!fs.existsSync("/etc/family-recipes/images/tmp")) {
+  fs.mkdirSync("/etc/family-recipes/images/tmp", {
+    recursive: true,
+  });
+}
+
+const storage = fastifyMulter.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "/etc/family-recipes/images/tmp");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now());
+  },
+});
+export const upload = fastifyMulter({ storage: storage });
 
 if (process.env.INSECURE) {
   console.log("WARNING: Insecure mode is enabled");
@@ -75,10 +92,7 @@ fastify.register(fastifyJwt, {
   },
 });
 
-fastify.register(fastifyUpload, {
-  useTempFiles: true,
-  tempFileDir: path.join(__dirname, "temp"),
-});
+fastify.register(fastifyMulter.contentParser, {});
 
 fastify.register(jwtAuth);
 fastify.register(userAccessAuth);

@@ -1,7 +1,6 @@
 import type { FastifyInstance, FastifySchema } from "fastify";
-import { Compress, UpdateImage } from "../../../../../../helpers/image-helper";
+import { GetImage } from "../../../../../../helpers/image-helper";
 import fs from "fs";
-import { upload } from "../../../../../..";
 import path from "path";
 
 type Params = {
@@ -19,30 +18,17 @@ const schema: FastifySchema = {
 };
 
 export default async function (fastify: FastifyInstance) {
-  fastify.put<{ Params: Params }>(
+  fastify.get<{ Params: Params }>(
     "/",
     {
       schema,
       onRequest: [fastify.jwtAuth, fastify.recipeAccessAuth],
-      preHandler: upload.single("image"),
     },
     async (request, reply) => {
       try {
-        if (!request.file.destination || !request.file.filename) {
-          const errorResponse: FamilyRecipes.Error = {
-            message: "No file was uploaded.",
-            code: "400",
-          };
-          return reply.status(400).send(errorResponse);
-        }
+        const file = await GetImage(fastify, request.params.recipeId);
 
-        const file = path.join(request.file.destination, request.file.filename);
-
-        const buffer = fs.readFileSync(file);
-        const compressed = await Compress(buffer);
-        await UpdateImage(fastify, request.params.recipeId, compressed);
-
-        reply.status(200).send();
+        reply.status(200).send(file);
       } catch (error) {
         fastify.log.error(error);
 

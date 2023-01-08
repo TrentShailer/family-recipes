@@ -46,6 +46,24 @@ const HasNotes = async (
   return rows.length > 0;
 };
 
+const CreateNote = async (
+  fastify: FastifyInstance,
+  userId: string,
+  recipeId: string,
+  note: string
+): Promise<Reply.Note | null> => {
+  const { rows } = await fastify.pg.query<Reply.Note>(
+    `
+		INSERT INTO notes (user_id, recipe_id, note)
+		VALUES ($1, $2, $3)
+		RETURNING id, note, user_id as userId, recipe_id as recipeId;
+		`,
+    [userId, recipeId, note]
+  );
+
+  return rows[0] || null;
+};
+
 export default async function (fastify: FastifyInstance) {
   fastify.post<{ Params: Params; Body: Body }>(
     "/",
@@ -72,40 +90,12 @@ export default async function (fastify: FastifyInstance) {
           };
           return reply.status(409).send(errorResponse);
         }
-
-        // ensure that the recipe exists
-        const { rows: recipeRows } = await fastify.pg.query<{ id: string }>(
-          `
-					SELECT
-						id
-					FROM recipes
-					WHERE id = $1;
-					`,
-          [request.params.recipeId]
+        const newNote = await CreateNote(
+          fastify,
+          request.user.userId,
+          request.params.recipeId,
+          request.body.note
         );
-
-        if (recipeRows.length === 0) {
-          const errorResponse: FamilyRecipes.Error = {
-            message:
-              "The recipe you are trying to add notes to does not exist.",
-            code: "404",
-          };
-          return reply.status(404).send(errorResponse);
-        }
-
-        const { rows: newNoteRows } = await fastify.pg.query<{
-          id: string;
-          note: string;
-        }>(
-          `
-					INSERT INTO notes (user_id, recipe_id, note)
-					VALUES ($1, $2, $3)
-					RETURNING id, note;
-					`,
-          [request.user.userId, request.params.recipeId, request.body.note]
-        );
-
-        const newNote = newNoteRows[0];
 
         return reply.status(201).send(newNote);
       } catch (error) {

@@ -6,6 +6,7 @@ type Params = {
 
 type Querystring = {
   page: number;
+  items?: number;
 };
 
 const schema: FastifySchema = {
@@ -21,6 +22,7 @@ const schema: FastifySchema = {
     required: ["page"],
     properties: {
       page: { type: "number" },
+      items: { type: "number" },
     },
   },
 };
@@ -28,24 +30,36 @@ const schema: FastifySchema = {
 const GetComments = async (
   fastify: FastifyInstance,
   recipeId: string,
-  page: number
-): Promise<Reply.Comment[]> => {
-  const { rows } = await fastify.pg.query<Reply.Comment>(
+  page: number,
+  items: number
+): Promise<string[]> => {
+  const { rows } = await fastify.pg.query<{ id: string }>(
     `SELECT
-			id,
-			user_id,
-			recipe_id,
-			comment,
-			created_at
+			id
 		FROM comments
 		WHERE recipe_id = $1
 		ORDER BY created_at DESC
-		LIMIT 10
+		LIMIT $3
 		OFFSET $2;`,
-    [recipeId, (page - 1) * 10]
+    [recipeId, (page - 1) * items, items]
   );
 
-  return rows;
+  return rows.map((row) => row.id);
+};
+
+const GetCommentCount = async (
+  fastify: FastifyInstance,
+  recipeId: string
+): Promise<number> => {
+  const { rows } = await fastify.pg.query<{ count: number }>(
+    `SELECT
+			COUNT(id)::int AS count
+		FROM comments
+		WHERE recipe_id = $1;`,
+    [recipeId]
+  );
+
+  return rows[0].count;
 };
 
 export default async function (fastify: FastifyInstance) {
@@ -57,9 +71,17 @@ export default async function (fastify: FastifyInstance) {
         const { recipeId } = request.params;
         const { page } = request.query;
 
-        const comments = await GetComments(fastify, recipeId, page);
+        let { items } = request.query;
 
-        return reply.status(200).send(comments);
+        if (!items) items = 10;
+
+        const commentIds = await GetComments(fastify, recipeId, page, items);
+        const commentCount = await GetCommentCount(fastify, recipeId);
+
+        return reply.status(200).send({
+          commentCount,
+          commentIds,
+        });
       } catch (error) {
         fastify.log.error(error);
 

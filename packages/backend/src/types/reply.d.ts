@@ -11,7 +11,7 @@ declare namespace Reply {
 
   export type Recipe = {
     id: Database.Recipe["id"];
-    recipe_book_id: Database.Recipe["recipe_book_id"];
+    recipeBookId: Database.Recipe["recipe_book_id"];
     name: Database.Recipe["name"];
     time: Database.Recipe["time"];
     servings: Database.Recipe["servings"];
@@ -24,21 +24,21 @@ declare namespace Reply {
 
   export type Favourite = {
     id: Database.Favourite["id"];
-    user_id: Database.Favourite["user_id"];
-    recipe_id: Database.Favourite["recipe_id"];
+    userId: Database.Favourite["user_id"];
+    recipeId: Database.Favourite["recipe_id"];
   };
 
   export type Note = {
     id: Database.Note["id"];
-    user_id: Database.Note["user_id"];
-    recipe_id: Database.Note["recipe_id"];
+    userId: Database.Note["user_id"];
+    recipeId: Database.Note["recipe_id"];
     note: Database.Note["note"];
   };
 
   export type Comment = {
     id: Database.Comment["id"];
-    user_id: Database.Comment["user_id"];
-    recipe_id: Database.Comment["recipe_id"];
+    userId: Database.Comment["user_id"];
+    recipeId: Database.Comment["recipe_id"];
     message: Database.Comment["message"];
     created_at: Database.Comment["created_at"];
   };

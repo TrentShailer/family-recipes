@@ -24,6 +24,8 @@ const plugin = fp(async function (fastify: FastifyInstance) {
             };
             return reply.status(403).send(errorResponse);
           }
+        } else {
+          throw new Error("Invalid request parameters.");
         }
       } catch (error) {
         fastify.log.error(error);
