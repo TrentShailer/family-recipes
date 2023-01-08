@@ -4,6 +4,7 @@ import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { Resource } from "@opentelemetry/resources";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
+import { diag, DiagConsoleLogger, DiagLogLevel } from "@opentelemetry/api";
 
 const init = (serviceName: string, environment: string) => {
   const exporterOptions = {
@@ -11,8 +12,10 @@ const init = (serviceName: string, environment: string) => {
   };
 
   const traceExporter = new OTLPTraceExporter(exporterOptions);
+  diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO);
+
   const sdk = new opentelemetry.NodeSDK({
-    traceExporter,
+    traceExporter: new opentelemetry.tracing.ConsoleSpanExporter(),
     instrumentations: [getNodeAutoInstrumentations()],
     resource: new Resource({
       [SemanticResourceAttributes.SERVICE_NAME]: serviceName,
