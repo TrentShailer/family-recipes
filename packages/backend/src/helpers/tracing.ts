@@ -1,5 +1,5 @@
 import process from "process";
-import opentelemetry from "@opentelemetry/sdk-node";
+import * as opentelemetry from "@opentelemetry/sdk-node";
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { Resource } from "@opentelemetry/resources";
