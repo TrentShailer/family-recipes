@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"isolatedModules": true,
+		"jsx": "react",
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"strictNullChecks": true
+	}
+}
