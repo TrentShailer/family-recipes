@@ -33,7 +33,7 @@ export default async function (fastify: FastifyInstance) {
         fastify.log.error(error);
 
         const errorResponse: FamilyRecipes.Error = {
-          message: "Something went wrong when trying to update the image.",
+          message: "Something went wrong when trying to get the image.",
           code: "500",
         };
         return reply.status(500).send(errorResponse);

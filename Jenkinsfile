@@ -35,9 +35,20 @@ pipeline {
 				sh 'yarn test'
 			}
 		}
+		stage ('Clean') {
+			steps {
+				sh 'yarn clean'
+			}
+		}
 		stage ('Build') {
 			steps {
 				sh 'yarn build'
+			}
+		}
+		stage ('Move frontend') {
+			steps {
+				sh 'mkdir packages/backend/build/frontend'
+				sh 'mv packages/frontend/dist/* packages/backend/build/frontend'
 			}
 		}
 		stage ('Docker Build') {

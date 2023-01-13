@@ -45,6 +45,11 @@ export default async function (fastify: FastifyInstance) {
 
         fs.unlinkSync(file);
 
+        await fastify.pg.query(
+          "UPDATE recipes SET has_image = TRUE WHERE id = $1",
+          [request.params.recipeId]
+        );
+
         reply.status(200).send();
       } catch (error) {
         fastify.log.error(error);

@@ -1,6 +1,7 @@
 import { createTheme } from "@mui/material/styles";
 import green from "@mui/material/colors/green";
 import blue from "@mui/material/colors/blue";
+import grey from "@mui/material/colors/grey";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -12,6 +13,7 @@ declare module "@mui/material/styles" {
   interface PaletteOptions {
     login?: PaletteOptions["primary"];
     register?: PaletteOptions["primary"];
+    cancel?: PaletteOptions["primary"];
   }
 }
 
@@ -19,6 +21,7 @@ declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
     login: true;
     register: true;
+    cancel: true;
   }
 }
 
@@ -30,6 +33,10 @@ const customTheme = createTheme({
     },
     register: {
       main: blue[400],
+      contrastText: "#fff",
+    },
+    cancel: {
+      main: grey[400],
       contrastText: "#fff",
     },
   },

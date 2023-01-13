@@ -20,12 +20,13 @@ declare namespace Database {
     id: string;
     recipe_book_id: string;
     name: string;
-    time: string;
-    servings: string;
+    time: number;
+    servings: number;
     ingredients: IngredientCategory[];
     steps: string[];
     author: string;
     notes: string | null | undefined;
+    has_image: boolean;
     created_at: Date;
   };
 

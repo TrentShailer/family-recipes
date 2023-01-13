@@ -19,6 +19,7 @@ declare namespace Reply {
     steps: Database.Recipe["steps"];
     author: Database.Recipe["author"];
     notes: Database.Recipe["notes"];
+    hasImage: Database.Recipe["has_image"];
     created_at: Database.Recipe["created_at"];
   };
 

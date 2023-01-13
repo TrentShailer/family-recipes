@@ -127,6 +127,34 @@ fastify.register(fastifyStatic, {
   root: path.join(__dirname, "frontend"),
 });
 
+fastify.get("/", async (request, reply) => {
+  if (request.user) {
+    return reply.redirect("/books");
+  }
+  return reply.sendFile("index.html", path.join(__dirname, "frontend"));
+});
+
+fastify.get("/books", async (request, reply) => {
+  if (request.user) {
+    return reply.sendFile("index.html", path.join(__dirname, "frontend"));
+  }
+  return reply.redirect("/");
+});
+
+fastify.get("/book/:recipeBookId", async (request, reply) => {
+  if (request.user) {
+    return reply.sendFile("index.html", path.join(__dirname, "frontend"));
+  }
+  return reply.redirect("/");
+});
+
+fastify.get("/recipe/:recipeId", async (request, reply) => {
+  if (request.user) {
+    return reply.sendFile("index.html", path.join(__dirname, "frontend"));
+  }
+  return reply.redirect("/");
+});
+
 fastify.register(fastifyAutoload, {
   dir: path.join(__dirname, "routes"),
   routeParams: true,

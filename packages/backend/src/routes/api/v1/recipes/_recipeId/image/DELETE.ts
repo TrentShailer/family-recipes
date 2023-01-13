@@ -23,6 +23,11 @@ export default async function (fastify: FastifyInstance) {
       try {
         await DeleteImage(fastify, request.params.recipeId);
 
+        await fastify.pg.query(
+          "UPDATE recipes SET has_image = FALSE WHERE id = $1",
+          [request.params.recipeId]
+        );
+
         reply.status(200).send();
       } catch (error) {
         fastify.log.error(error);

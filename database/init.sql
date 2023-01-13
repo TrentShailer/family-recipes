@@ -19,6 +19,7 @@ create table if not exists "recipes" (
 	"steps" varchar [] not null,
 	"author" varchar not null,
 	"notes" varchar,
+	"has_image" boolean not null default false,
 	"created_at" timestamptz not null default NOW()
 );
 create table if not exists "comments" (

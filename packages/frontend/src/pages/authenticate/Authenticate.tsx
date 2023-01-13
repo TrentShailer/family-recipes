@@ -12,7 +12,7 @@ import CenterGlass from "./components/CenterGlass";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LoginIcon from "@mui/icons-material/Login";
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useSnackbar } from "notistack";
 import { UserContext } from "../..";
 
@@ -49,7 +49,7 @@ export default function Authenticate() {
         name,
         password,
       })
-      .then((response) => {
+      .then((response: AxiosResponse<Reply.User>) => {
         const { data } = response;
         const { id, name } = data;
         setUser({ id, name });
@@ -63,18 +63,13 @@ export default function Authenticate() {
       })
       .catch((error) => {
         if (axios.isAxiosError(error)) {
-          switch (error.status) {
-            case 409:
-            case 500:
-              if (error.response && error.response.data.message) {
-                enqueueSnackbar(error.response.data.message, {
-                  variant: "error",
-                });
-                break;
-              }
-            default:
-              console.error(error);
-              enqueueSnackbar(error.message, { variant: "error" });
+          if (error.response && error.response.data.message) {
+            enqueueSnackbar(error.response.data.message, {
+              variant: "error",
+            });
+          } else {
+            console.error(error);
+            enqueueSnackbar(error.message, { variant: "error" });
           }
         } else {
           console.error(error);
@@ -101,11 +96,14 @@ export default function Authenticate() {
         name,
         password,
       })
-      .then((response) => {
+      .then((response: AxiosResponse<Reply.User>) => {
         const { data } = response;
         const { id, name } = data;
+
         setUser({ id, name });
+
         const backLocation = localStorage.getItem("backLocation");
+
         if (backLocation) {
           localStorage.removeItem("backLocation");
           window.location.href = backLocation;
@@ -115,18 +113,13 @@ export default function Authenticate() {
       })
       .catch((error) => {
         if (axios.isAxiosError(error)) {
-          switch (error.status) {
-            case 401:
-            case 500:
-              if (error.response && error.response.data.message) {
-                enqueueSnackbar(error.response.data.message, {
-                  variant: "error",
-                });
-                break;
-              }
-            default:
-              console.error(error);
-              enqueueSnackbar(error.message, { variant: "error" });
+          if (error.response && error.response.data.message) {
+            enqueueSnackbar(error.response.data.message, {
+              variant: "error",
+            });
+          } else {
+            console.error(error);
+            enqueueSnackbar(error.message, { variant: "error" });
           }
         } else {
           console.error(error);
@@ -153,12 +146,13 @@ export default function Authenticate() {
           >
             <Grid>
               <GlassTextField
+                autoFocus
                 required
                 label="Name"
                 fullWidth
                 variant="filled"
                 value={name}
-                helperText="^ Case sensitive"
+                helperText="Name is case sensitive"
                 onChange={(e) => setName(e.target.value)}
               />
             </Grid>
@@ -175,16 +169,11 @@ export default function Authenticate() {
             </Grid>
 
             <Grid sx={{ mt: 2, mb: 1 }}>
-              <Grid container justifyContent={"space-around"}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  color="register"
-                  startIcon={<PersonAddIcon />}
-                  onClick={TryRegister}
-                >
-                  Register
-                </Button>
+              <Grid
+                container
+                justifyContent={"space-around"}
+                direction="row-reverse"
+              >
                 <Button
                   variant="contained"
                   size="large"
@@ -193,6 +182,15 @@ export default function Authenticate() {
                   onClick={TryLogin}
                 >
                   Login
+                </Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  color="register"
+                  startIcon={<PersonAddIcon />}
+                  onClick={TryRegister}
+                >
+                  Register
                 </Button>
               </Grid>
             </Grid>

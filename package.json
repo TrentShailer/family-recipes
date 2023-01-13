@@ -15,6 +15,7 @@
 	"scripts": {
 		"build": "lerna run build",
 		"test": "lerna run test",
-		"start": "node ./packages/backend/build/index.js"
+		"start": "node ./packages/backend/build/index.js",
+		"clean": "lerna run clean"
 	}
 }

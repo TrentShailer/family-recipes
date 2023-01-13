@@ -20,7 +20,7 @@ const GetRecipe = async (
 ): Promise<Reply.Recipe | null> => {
   const { rows } = await fastify.pg.query<Reply.Recipe>(
     `
-		SELECT id, recipe_book_id, name, time, servings, ingredients, steps, author, notes
+		SELECT id, recipe_book_id as recipeBookId, name, time, servings, ingredients, steps, author, notes, has_Image as hasImage
 		FROM recipes
 		WHERE id = $1;
 		`,
