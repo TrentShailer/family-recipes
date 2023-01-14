@@ -61,6 +61,32 @@ const GetRecipes = async (
     [recipeBookId, `%${search}%`, (page - 1) * items, items]
   );
 
+  // as above but order by favourites from the favourite table then by name
+  const sql = `
+	SELECT
+		recipes.id
+		FROM recipes
+		LEFT JOIN favourites
+		ON favourites.recipe_id = recipes.id
+		WHERE recipes.recipe_book_id = $1
+		AND (
+			recipes.name ILIKE $2
+			OR $2 ILIKE ANY (recipes.steps)
+			OR recipes.notes ILIKE $2
+			OR recipes.author ILIKE $2
+			OR EXISTS (
+				SELECT id
+				FROM tags
+				WHERE tags.recipe_id = recipes.id
+				AND tags.tag ILIKE $2
+			)
+		)
+		ORDER BY favourites.id DESC
+		ORDER BY recipes.name
+		LIMIT $4
+		OFFSET $3;
+		`;
+
   return rows.map((row) => row.id);
 };
 
