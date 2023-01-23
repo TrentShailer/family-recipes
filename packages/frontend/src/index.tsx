@@ -34,11 +34,14 @@ const router = createBrowserRouter([
 ]);
 
 export const UserContext = React.createContext<
-  [Reply.User | null, React.Dispatch<React.SetStateAction<Reply.User | null>>]
+  [
+    Reply.Session | null,
+    React.Dispatch<React.SetStateAction<Reply.Session | null>>
+  ]
 >([null, () => {}]);
 
 const Root = () => {
-  const [user, setUser] = useState<Reply.User | null>(null);
+  const [user, setUser] = useState<Reply.Session | null>(null);
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -61,14 +64,15 @@ const GetSessionOnLoad = () => {
     if (!user) {
       axios
         .get("/api/v1/session")
-        .then((response: AxiosResponse<Reply.User>) => {
+        .then((response: AxiosResponse<Reply.Session>) => {
           const { data } = response;
-          const { id, name } = data;
-          setUser({ id, name });
+          const { userId, name } = data;
+          setUser({ userId, name });
         })
         .catch((error) => {
           if (axios.isAxiosError(error)) {
-            switch (error.status) {
+            const status = error.response?.status ?? 500;
+            switch (status) {
               case 401:
                 break;
               case 403:

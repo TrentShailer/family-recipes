@@ -3,6 +3,12 @@ declare namespace Reply {
     id: string;
     name: string;
   };
+
+  export type Session = {
+    userId: string;
+    name: string;
+  };
+
   export type IngredientCategory = {
     name: string;
     ingredients: string[];

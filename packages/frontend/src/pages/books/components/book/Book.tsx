@@ -37,8 +37,6 @@ export default function Book(props: Props) {
   );
   const [scale, setScale] = React.useState<number>(1);
 
-  const [bookElement, setBookElement] = React.useState(<></>);
-
   const desktopContainerProps: Grid2Props = {
     container: true,
     gap: 4,

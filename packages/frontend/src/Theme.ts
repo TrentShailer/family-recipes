@@ -7,6 +7,8 @@ declare module "@mui/material/styles" {
   interface Palette {
     login: Palette["primary"];
     register: Palette["primary"];
+    cancel: Palette["primary"];
+    appBar: Palette["primary"];
   }
 
   // allow configuration using `createTheme`
@@ -14,6 +16,7 @@ declare module "@mui/material/styles" {
     login?: PaletteOptions["primary"];
     register?: PaletteOptions["primary"];
     cancel?: PaletteOptions["primary"];
+    appBar?: PaletteOptions["primary"];
   }
 }
 
@@ -22,6 +25,9 @@ declare module "@mui/material/Button" {
     login: true;
     register: true;
     cancel: true;
+  }
+  interface AppBarPropsColorOverrides {
+    appBar: true;
   }
 }
 
@@ -38,6 +44,10 @@ const customTheme = createTheme({
     cancel: {
       main: grey[400],
       contrastText: "#fff",
+    },
+    appBar: {
+      main: grey[300],
+      contrastText: grey[900],
     },
   },
   typography: {

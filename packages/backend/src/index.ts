@@ -115,7 +115,7 @@ fastify.addHook("onRequest", async (request, reply) => {
           path: "/",
           secure: process.env.INSECURE ? false : true,
           httpOnly: true,
-          sameSite: true,
+          sameSite: "strict",
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
         });
       }

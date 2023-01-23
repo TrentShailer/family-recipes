@@ -10,7 +10,7 @@ export default function LogoutButton() {
   const [user, setUser] = React.useContext(UserContext);
   const Logout = () => {
     axios
-      .delete("/session")
+      .delete("/api/v1/session")
       .then(() => {
         setUser(null);
         window.location.href = "/";

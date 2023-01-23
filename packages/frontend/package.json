@@ -3,7 +3,10 @@
 	"packageManager": "yarn@3.3.1",
 	"devDependencies": {
 		"@parcel/config-default": "^2.8.2",
+		"@parcel/core": "^2.8.3",
+		"@parcel/optimizer-image": "^2.8.3",
 		"@parcel/transformer-svg-react": "^2.8.2",
+		"@parcel/types": "^2.8.3",
 		"@types/react": "^18.0.26",
 		"@types/react-dom": "^18.0.10",
 		"parcel": "^2.8.2",
@@ -13,7 +16,7 @@
 	"scripts": {
 		"start": "parcel",
 		"clean": "rimraf dist",
-		"build": "yarn clean && parcel build"
+		"build": "yarn clean && parcel build --public-url . src/index.html --no-source-maps --no-scope-hoist --public-url /"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.10.5",

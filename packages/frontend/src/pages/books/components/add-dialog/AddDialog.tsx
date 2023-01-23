@@ -88,7 +88,7 @@ export default function AddDialog(props: Props) {
     };
 
     axios
-      .post(`/api/v1/users/${user.id}/recipeBooks`, {
+      .post(`/api/v1/users/${user.userId}/recipeBooks`, {
         name,
         password,
       })

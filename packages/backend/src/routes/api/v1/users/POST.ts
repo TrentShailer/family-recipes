@@ -65,7 +65,7 @@ const SetJWT = async (reply: FastifyReply, user: Reply.User) => {
     path: "/",
     secure: process.env.INSECURE ? false : true,
     httpOnly: true,
-    sameSite: true,
+    sameSite: "strict",
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
   });
 };

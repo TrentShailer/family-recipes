@@ -16,6 +16,7 @@
 		"build": "lerna run build",
 		"test": "lerna run test",
 		"start": "node ./packages/backend/build/index.js",
-		"clean": "lerna run clean"
+		"clean": "lerna run clean",
+		"full-build": "yarn clean && yarn build && mkdir packages/backend/build/frontend && mv packages/frontend/dist/* packages/backend/build/frontend"
 	}
 }

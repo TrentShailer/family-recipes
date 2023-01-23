@@ -22,13 +22,24 @@ export default function Books() {
 
   const GetBooks = () => {
     if (!user) return;
+    console.log(user);
     setLoading(true);
     setBooks([]);
 
-    const OnResponse = (response: AxiosResponse<Reply.RecipeBook[]>) => {
-      const { data } = response;
-      setBooks(data);
-      setLoading(false);
+    const OnResponse = (response: AxiosResponse<Reply.RecipeBook["id"][]>) => {
+      const { data: ids } = response;
+      try {
+        const promises = ids.map((id) =>
+          axios.get(`/api/v1/recipeBooks/${id}`)
+        );
+        axios.all(promises).then((responses) => {
+          const books = responses.map((response) => response.data);
+          setBooks(books);
+          setLoading(false);
+        });
+      } catch (error) {
+        OnError(error);
+      }
     };
 
     const OnError = (error: any) => {
@@ -44,7 +55,7 @@ export default function Books() {
       } else {
         console.error(error);
         enqueueSnackbar(
-          "An error occurred when trying to create your account.",
+          "An error occurred when trying to find your recipe books.",
           { variant: "error" }
         );
       }
@@ -52,7 +63,7 @@ export default function Books() {
     };
 
     axios
-      .get(`/api/v1/users/${user.id}/recipeBooks`)
+      .get(`/api/v1/users/${user.userId}/recipeBooks`)
       .then(OnResponse)
       .catch(OnError);
   };
