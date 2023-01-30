@@ -1,11 +1,11 @@
 import Typography from "@mui/material/Typography";
-import React, { useEffect } from "react";
-import { UserContext } from "../../..";
+import * as React from "react";
+import { UserContext } from "../../../AppContext";
 
 export default function Title() {
   const [user, setUser] = React.useContext(UserContext);
   const [greeting, setGreeting] = React.useState("Good Evening");
-  useEffect(() => {
+  React.useEffect(() => {
     const date = new Date();
     const hour = date.getHours();
     if (hour < 12) {

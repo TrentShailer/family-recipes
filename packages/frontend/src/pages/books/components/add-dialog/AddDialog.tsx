@@ -13,7 +13,7 @@ import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { useSnackbar } from "notistack";
-import { UserContext } from "../../../..";
+import { PageContext, UserContext } from "../../../../AppContext";
 import axios, { Axios, AxiosResponse } from "axios";
 
 type Props = {
@@ -33,6 +33,7 @@ const ValidInputs = (name: string, password: string): string | true => {
 };
 
 export default function AddDialog(props: Props) {
+  const [page, setPage] = React.useContext(PageContext);
   const [user, setUser] = React.useContext(UserContext);
   const [name, setName] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
@@ -48,7 +49,7 @@ export default function AddDialog(props: Props) {
 
   const Join = () => {
     if (!user) {
-      window.location.href = "/";
+      setPage("/authenticate");
       return;
     }
     setLoading(true);
@@ -61,6 +62,9 @@ export default function AddDialog(props: Props) {
     }
 
     const OnResponse = (response: AxiosResponse<Reply.RecipeBook>) => {
+      if (!response.data || !response.data.id) {
+        throw new Error("Invalid response from server.");
+      }
       props.onAdd(response.data);
       Close();
     };
@@ -98,7 +102,7 @@ export default function AddDialog(props: Props) {
 
   const Create = () => {
     if (!user) {
-      window.location.href = "/";
+      setPage("/authenticate");
       return;
     }
     setLoading(true);
@@ -111,6 +115,9 @@ export default function AddDialog(props: Props) {
     }
 
     const OnResponse = (response: AxiosResponse<Reply.RecipeBook>) => {
+      if (!response.data || !response.data.id) {
+        throw new Error("Invalid response from server.");
+      }
       props.onAdd(response.data);
       Close();
     };

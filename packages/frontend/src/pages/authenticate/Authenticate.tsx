@@ -14,7 +14,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import { useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { useSnackbar } from "notistack";
-import { UserContext } from "../..";
+import { PageContext, UserContext } from "../../AppContext";
 
 const ValidInputs = (name: string, password: string): string | true => {
   if (!name || name.length === 0) {
@@ -28,11 +28,29 @@ const ValidInputs = (name: string, password: string): string | true => {
 
 export default function Authenticate() {
   const [user, setUser] = React.useContext(UserContext);
+  const [page, setPage] = React.useContext(PageContext);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const OnSuccess = (response: AxiosResponse<Reply.User>) => {
+    const { data } = response;
+    const { id, name } = data;
+    if (!id || !name) {
+      throw new Error("Invalid response from server.");
+    }
+    setUser({ userId: id, name });
+    // get search params
+    const urlParams = new URLSearchParams(window.location.search);
+    const lastPage = urlParams.get("lastPage");
+    if (lastPage) {
+      setPage(lastPage);
+    } else {
+      setPage("/books");
+    }
+  };
 
   const TryRegister = () => {
     setLoading(true);
@@ -49,18 +67,7 @@ export default function Authenticate() {
         name,
         password,
       })
-      .then((response: AxiosResponse<Reply.User>) => {
-        const { data } = response;
-        const { id, name } = data;
-        setUser({ id, name });
-        const backLocation = localStorage.getItem("backLocation");
-        if (backLocation) {
-          localStorage.removeItem("backLocation");
-          window.location.href = backLocation;
-        } else {
-          window.location.href = "/books";
-        }
-      })
+      .then(OnSuccess)
       .catch((error) => {
         if (axios.isAxiosError(error)) {
           if (error.response && error.response.data.message) {
@@ -96,21 +103,7 @@ export default function Authenticate() {
         name,
         password,
       })
-      .then((response: AxiosResponse<Reply.User>) => {
-        const { data } = response;
-        const { id, name } = data;
-
-        setUser({ id, name });
-
-        const backLocation = localStorage.getItem("backLocation");
-
-        if (backLocation) {
-          localStorage.removeItem("backLocation");
-          window.location.href = backLocation;
-        } else {
-          window.location.href = "/books";
-        }
-      })
+      .then(OnSuccess)
       .catch((error) => {
         if (axios.isAxiosError(error)) {
           if (error.response && error.response.data.message) {

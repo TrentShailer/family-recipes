@@ -15,7 +15,7 @@ declare namespace Reply {
     name: Database.Recipe["name"];
     time: Database.Recipe["time"];
     servings: Database.Recipe["servings"];
-    ingredients: IngredientCategory[];
+    ingredients: Database.IngredientCategory[];
     steps: Database.Recipe["steps"];
     author: Database.Recipe["author"];
     notes: Database.Recipe["notes"];

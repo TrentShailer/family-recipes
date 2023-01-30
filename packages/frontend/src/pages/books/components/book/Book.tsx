@@ -5,7 +5,7 @@ import * as React from "react";
 import Image from "./Image";
 import Typography from "@mui/material/Typography";
 import { grey } from "@mui/material/colors";
-import { Box } from "@mui/material";
+import { Box, Link } from "@mui/material";
 
 type Props = {
   name: string;
@@ -79,7 +79,12 @@ export default function Book(props: Props) {
   }, [desktop]);
   return (
     <Box
+      component={Link}
+      href={props.bookId ? `/books/${props.bookId}` : undefined}
+      underline="none"
       sx={{
+        color: "inherit",
+        textDecoration: "none",
         cursor: "pointer",
         transform: `scale(${scale})`,
         transition: "transform 300ms",

@@ -1,4 +1,4 @@
-import { IconButton, Toolbar, Typography } from "@mui/material";
+import { IconButton, Link, Toolbar, Typography } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import * as React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -14,9 +14,15 @@ export default function MenuBar(props: Props) {
   return (
     <AppBar color="appBar" position="static">
       <Toolbar>
-        <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-          <ArrowBackIcon />
-        </IconButton>
+        <Link
+          href="/books"
+          underline="none"
+          sx={{ color: "inherit", textDecoration: "none" }}
+        >
+          <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
+            <ArrowBackIcon />
+          </IconButton>
+        </Link>
         <Typography
           variant="h6"
           noWrap

@@ -3,9 +3,10 @@ import * as React from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import { UserContext } from "../../..";
+import { PageContext, UserContext } from "../../../AppContext";
 
 export default function LogoutButton() {
+  const [page, setPage] = React.useContext(PageContext);
   const { enqueueSnackbar } = useSnackbar();
   const [user, setUser] = React.useContext(UserContext);
   const Logout = () => {
@@ -13,7 +14,8 @@ export default function LogoutButton() {
       .delete("/api/v1/session")
       .then(() => {
         setUser(null);
-        window.location.href = "/";
+        setPage("/");
+        window.localStorage.removeItem("page");
       })
       .catch((error) => {
         if (axios.isAxiosError(error)) {

@@ -4,7 +4,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import axios, { AxiosResponse } from "axios";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { UserContext } from "../..";
+import { PageContext, UserContext } from "../../AppContext";
 import AddDialog from "./components/add-dialog/AddDialog";
 
 import Book from "./components/book/Book";
@@ -14,6 +14,7 @@ import Title from "./components/Title";
 const AddImage = new URL("../../public/AddImage.svg", import.meta.url).href;
 
 export default function Books() {
+  const [page, setPage] = React.useContext(PageContext);
   const [loading, setLoading] = React.useState(true);
   const [user, setUser] = React.useContext(UserContext);
   const [books, setBooks] = React.useState<Reply.RecipeBook[]>([]);
@@ -28,12 +29,20 @@ export default function Books() {
 
     const OnResponse = (response: AxiosResponse<Reply.RecipeBook["id"][]>) => {
       const { data: ids } = response;
+      if (!ids || !Array.isArray(ids)) {
+        throw new Error("Invalid response from server");
+      }
       try {
         const promises = ids.map((id) =>
           axios.get(`/api/v1/recipeBooks/${id}`)
         );
         axios.all(promises).then((responses) => {
-          const books = responses.map((response) => response.data);
+          const books = responses.map((response) => {
+            if (!response.data || !response.data.id) {
+              throw new Error("Invalid response from server");
+            }
+            return response.data;
+          });
           setBooks(books);
           setLoading(false);
         });
@@ -111,7 +120,7 @@ export default function Books() {
                   bookId={book.id}
                   name={book.name}
                   onClick={() => {
-                    window.location.href = `/book/${book.id}`;
+                    setPage(`/books/${book.id}`);
                   }}
                 />
               ))}

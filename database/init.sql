@@ -51,5 +51,6 @@ create table if not exists "notes" (
 create table if not exists "tags" (
 	"id" uuid primary key default gen_random_uuid(),
 	"recipe_id" uuid not null references "recipes"("id") on delete cascade,
-	"tag" varchar not null
+	"tag" varchar not null,
+	unique("recipe_id", "tag")
 );

@@ -1,8 +1,10 @@
-import { Fab } from "@mui/material";
+import { Box, Fab } from "@mui/material";
 import * as React from "react";
 import PostAddIcon from "@mui/icons-material/PostAdd";
+import { PageContext } from "../../../AppContext";
 
 export default function FAB() {
+  const [page, setPage] = React.useContext(PageContext);
   return (
     <Fab
       sx={{
@@ -12,7 +14,7 @@ export default function FAB() {
       }}
       color="primary"
       onClick={() => {
-        window.location.href = "/recipe/create";
+        setPage("/recipe/create");
       }}
     >
       <PostAddIcon />
